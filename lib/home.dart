@@ -1,6 +1,7 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ten_news/screens/home/homepage.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -160,9 +161,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: <Widget>[
-        Container(
-          color: Colors.blue,
-        ),
+        HomePage(),
         Container(
           color: Colors.red,
         ),
