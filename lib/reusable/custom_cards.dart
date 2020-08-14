@@ -29,7 +29,7 @@ class HomePageCard extends StatelessWidget {
                 width: 1,
               ),
               image: DecorationImage(
-                  image: AssetImage(imageUrl), fit: BoxFit.fill),
+                  image: NetworkImage(imageUrl), fit: BoxFit.fill),
             ),
             child: Align(
               alignment: Alignment.bottomCenter,

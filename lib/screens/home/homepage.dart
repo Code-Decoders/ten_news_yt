@@ -1,8 +1,15 @@
+import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ten_news/model/categories_model.dart';
-import 'package:ten_news/reusable/custom_cards.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../model/categories_model.dart';
+import 'package:ten_news/utils.dart';
+import '../../reusable/custom_cards.dart';
 
 class HomePage extends StatefulWidget {
+  final Map<String, List> newsData;
+
+  const HomePage({Key key, this.newsData}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -12,7 +19,7 @@ class _HomePageState extends State<HomePage>
   ScrollController _scrollController;
   TabController _tabController;
   int currentIndex = 0;
-
+  Map<String, List> _newsData = Map<String, List>();
   @override
   void initState() {
     // TODO: implement initState
@@ -20,6 +27,9 @@ class _HomePageState extends State<HomePage>
     _scrollController = ScrollController();
     _tabController = TabController(length: categories.length, vsync: this);
     _tabController.addListener(_smoothScrollToTop);
+    setState(() {
+      _newsData = Map.from(widget.newsData);
+    });
   }
 
   _smoothScrollToTop() {
@@ -92,14 +102,48 @@ class _HomePageState extends State<HomePage>
           ),
         ];
       },
-        body: Container(
-          child: TabBarView(controller: _tabController,children: List.generate(categories.length, (index) {
-            return ListView.builder(itemCount: 10,itemBuilder: (context, index) {
-              return HomePageCard();
-            },
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            );
-          })),
-        ));
+      body: Container(
+        child: TabBarView(
+            controller: _tabController,
+            children: List.generate(
+              categories.length,
+              (index) {
+                var key = categories[index]
+                    .imageUrl
+                    .toString()
+                    .split("/")[3]
+                    .split(".")[0]
+                    .replaceAll("_", "-");
+                return ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  itemBuilder: (context, i) {
+                    String time = _newsData[key][i]['pubDate']['__cdata'];
+                    DateTime timeIST = DateTime.parse(time.split(" ")[3] +
+                        "-" +
+                        getMonthNumberFromName(month: time.split(" ")[2]) +
+                        "-" +
+                        time.split(" ")[1] +
+                        " " +
+                        time.split(" ")[4]);
+                    timeIST = timeIST
+                        .add(Duration(hours: 5))
+                        .add(Duration(minutes: 30));
+                    return HomePageCard(
+                      title: _newsData[key][i]['title']['__cdata'],
+                      subtitle: _newsData[key][i]['description']['__cdata'],
+                      time: timeIST.day.toString() +
+                          " " +
+                          getMonthNumberInWords(month: timeIST.month) +
+                          " " +
+                          timeIST.toString().split(" ")[1].substring(0, 5),
+                      imageUrl: _newsData[key][i]['media\$content']['url'],
+                    );
+                  },
+                  itemCount: _newsData[key]?.length ?? 0,
+                );
+              },
+            )),
+      ),
+    );
   }
 }
