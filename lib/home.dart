@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ten_news/backend/rss_to_json.dart';
 import 'package:ten_news/screens/home/homepage.dart';
+import 'package:ten_news/screens/search/search.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -220,9 +221,7 @@ class _HomeState extends State<Home> {
         HomePage(
           newsData: newsData,
         ),
-        Container(
-          color: Colors.red,
-        ),
+        Search(),
         Container(
           color: Colors.yellow,
         ),
