@@ -171,6 +171,7 @@ class _SearchState extends State<Search> {
                   fontWeight: FontWeight.w500,
                   color: Colors.black.withOpacity(.55),
                 )),
+                
             TextSpan(
                 text: _searchController.text,
                 style: TextStyle(
