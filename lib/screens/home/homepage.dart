@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage>
   }
 
   _smoothScrollToTop() {
+    if (_scrollController.hasClients) 
     _scrollController.animateTo(
       0,
       duration: Duration(microseconds: 300),
