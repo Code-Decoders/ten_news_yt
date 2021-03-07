@@ -18,47 +18,41 @@ class _HomeState extends State<Home> {
       currentIndex = index;
     });
   }
+
   Map<String, List> newsData = Map<String, List>();
   bool isLoading = true;
-  getData()async{
+  getData() async {
     Future.wait([
       rssToJson('topnews'),
       rssToJson('india'),
-      rssToJson('world'),
+      rssToJson('world-news'),
       rssToJson('business'),
       rssToJson('sports'),
       rssToJson('cricket'),
-      rssToJson('tech-features'),
       rssToJson('education'),
       rssToJson('entertainment'),
-      rssToJson('music'),
       rssToJson('lifestyle'),
-      rssToJson('health-fitness'),
-      rssToJson('fashion-trends'),
-      rssToJson('art-culture'),
-      rssToJson('travel'),
+      rssToJson('health'),
       rssToJson('books'),
-      rssToJson('realestate'),
-      rssToJson('its-viral'),
+      rssToJson('trending'),
     ]).then((value) {
-      newsData['topnews'] = value[0];
+      value[0] = [];
+      value.forEach((element) {
+        value[0].addAll([...element ?? []]);
+      });
+      value[0].shuffle();
+      newsData['topnews'] = value[0].sublist(0, 10);
       newsData['india'] = value[1];
       newsData['world'] = value[2];
       newsData['business'] = value[3];
       newsData['sports'] = value[4];
       newsData['cricket'] = value[5];
-      newsData['tech'] = value[6];
-      newsData['education'] = value[7];
-      newsData['entertainment'] = value[8];
-      newsData['music'] = value[9];
-      newsData['lifestyle'] = value[10];
-      newsData['health-fitness'] = value[11];
-      newsData['fashion-trends'] = value[12];
-      newsData['art-culture'] = value[13];
-      newsData['travel'] = value[14];
-      newsData['books'] = value[15];
-      newsData['realestate'] = value[16];
-      newsData['its-viral'] = value[17];
+      newsData['education'] = value[6];
+      newsData['entertainment'] = value[7];
+      newsData['lifestyle'] = value[8];
+      newsData['health-fitness'] = value[9];
+      newsData['books'] = value[10];
+      newsData['its-viral'] = value[11];
       setState(() {
         isLoading = false;
       });
@@ -215,20 +209,24 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: isLoading ? Center(
-        child: CircularProgressIndicator(),
-      ): <Widget>[
-        HomePage(
-          newsData: newsData,
-        ),
-        Search(),
-        Container(
-          color: Colors.yellow,
-        ),
-        Container(
-          color: Colors.green,
-        ),
-      ][currentIndex],
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : <Widget>[
+              HomePage(
+                newsData: newsData,
+              ),
+              Container(
+                color: Colors.red,
+              ),
+              Container(
+                color: Colors.yellow,
+              ),
+              Container(
+                color: Colors.green,
+              ),
+            ][currentIndex],
       bottomNavigationBar: BubbleBottomBar(
         opacity: 0,
         currentIndex: currentIndex,

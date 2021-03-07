@@ -1,7 +1,4 @@
-import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../model/categories_model.dart';
 import 'package:ten_news/utils.dart';
 import '../../reusable/custom_cards.dart';
@@ -118,21 +115,15 @@ class _HomePageState extends State<HomePage>
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   itemBuilder: (context, i) {
                     String time = _newsData[key][i]['pubDate']['__cdata'];
-                    DateTime timeIST = DateTime.parse(time.split(" ")[3] +
-                        "-" +
-                        getMonthNumberFromName(month: time.split(" ")[2]) +
-                        "-" +
-                        time.split(" ")[1] +
-                        " " +
-                        time.split(" ")[4]);
+                    DateTime timeIST = DateTime.parse(time);
                     timeIST = timeIST
                         .add(Duration(hours: 5))
                         .add(Duration(minutes: 30));
                     return HomePageCard(
-                      title: _newsData[key][i]['title']['__cdata'],
+                      title: _newsData[key][i]['title']['__cdata'].replaceAll(r"\'",''),
                       subtitle: _newsData[key][i]['description']['__cdata'],
                       time: timeIST.day.toString() +
-                          " " +
+                          " " + 
                           getMonthNumberInWords(month: timeIST.month) +
                           " " +
                           timeIST.toString().split(" ")[1].substring(0, 5),
